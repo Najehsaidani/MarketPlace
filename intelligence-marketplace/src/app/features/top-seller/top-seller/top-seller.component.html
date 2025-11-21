@@ -1,0 +1,33 @@
+<div class="top-seller-page">
+  <div class="container">
+    <h1 class="page-title">Meilleurs Vendeurs</h1>
+
+    <div class="sellers-grid">
+      <div class="seller-card" *ngFor="let seller of topSellers">
+        <div class="seller-image">
+          <img [src]="seller.image" [alt]="seller.name" />
+        </div>
+        <div class="seller-info">
+          <h3>{{ seller.name }}</h3>
+          <div class="seller-stats">
+            <div class="stat">
+              <span class="stat-value">{{ seller.rating }}</span>
+              <span class="stat-label">Note</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">{{ seller.salesCount }}</span>
+              <span class="stat-label">Ventes</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">{{ seller.productsCount }}</span>
+              <span class="stat-label">Produits</span>
+            </div>
+          </div>
+          <button class="visit-button" [routerLink]="'/seller/' + seller.id">
+            Visiter la Boutique
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

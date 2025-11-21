@@ -1,0 +1,2 @@
+This is a placeholder for seller images.
+In a real application, you would add actual seller images here.

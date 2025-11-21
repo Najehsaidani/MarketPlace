@@ -1,0 +1,55 @@
+<div class="home-page">
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>BIENVENUE SUR INTELLIGENCE <strong>MARKETPLACE</strong></h1>
+      <p>La plateforme où acheteurs et vendeurs se rencontrent</p>
+      <button routerLink="/catalogue" class="cta-button">Découvrir le Catalogue →</button>
+    </div>
+    <div class="hero-image">
+      <div class="floating-elements">
+        <div class="floating-element element-1">📱</div>
+        <div class="floating-element element-2">💻</div>
+        <div class="floating-element element-3">🎧</div>
+        <div class="floating-element element-4">⌚</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="popular-products">
+    <h2>Produits populaires</h2>
+    <div *ngIf="loading" class="loading">
+      <div class="skeleton-loader">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
+      </div>
+    </div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div class="product-carousel" *ngIf="!loading && !error">
+      <button class="arrow-btn prev-btn" (click)="scroll('prev')">&#10094;</button>
+      <div class="carousel-content" #carousel>
+        <app-product-card *ngFor="let product of popularProducts" [product]="product" />
+      </div>
+      <button class="arrow-btn next-btn" (click)="scroll('next')">&#10095;</button>
+    </div>
+  </section>
+
+  <section class="platform-info">
+    <h2>Une plateforme sécurisée et collaborative</h2>
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-icon">🔒</div>
+        <h3>Sécurité (Admin/Modérateurs)</h3>
+        <p>L'administrateur valide chaque produit pour des transactions en toute confiance, assisté par des modérateurs désignés.</p>
+      </div>
+      <div class="info-box">
+        <div class="info-icon">💬</div>
+        <h3>Chat en Temps Réel</h3>
+        <p>Discutez directement avec les vendeurs avant d'acheter pour clarifier vos doutes et négocier.</p>
+      </div>
+      <div class="info-box">
+        <div class="info-icon">🤝</div>
+        <h3>Vendre Facilement</h3>
+        <p>Devenez vendeur et proposez vos produits en quelques clics (Validation Admin requise).</p>
+      </div>
+    </div>
+  </section>
+</div>

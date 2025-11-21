@@ -1,0 +1,360 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-info">
+      <img [src]="clientInfo.avatar" alt="Profile Avatar" class="profile-avatar">
+      <div class="profile-details">
+        <h1>{{ clientInfo.name }}</h1>
+        <p class="profile-email">{{ clientInfo.email }}</p>
+        <p class="profile-member-since">Member since {{ clientInfo.memberSince }}</p>
+        <p class="profile-role" *ngIf="isSellerView">Role: <strong>Seller</strong></p>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+    <button class="toggle-view-btn" (click)="toggleView()">
+      {{ isSellerView ? 'Switch to Client View' : 'Switch to Seller View' }}
+    </button>
+    <button class="toggle-view-btn" (click)="testNotification()" style="margin-left: 10px;">
+      Test Notification
+    </button>
+  </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button class="tab-btn" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+      </svg>
+      Profile
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'orders'" (click)="setActiveTab('orders')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+      </svg>
+      Orders
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'seller'" (click)="setActiveTab('seller')" *ngIf="isSellerView">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0z"/>
+        <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1zm0 5.586 7 7L13.586 9l-7-7H2v4.586z"/>
+      </svg>
+      Seller Dashboard
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'reviews'" (click)="setActiveTab('reviews')" *ngIf="isSellerView">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 15.5V2zm1 0v13.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V2H4z"/>
+        <path d="M6.5 4a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM6 6.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm.5 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+      </svg>
+      Reviews
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'payments'" (click)="setActiveTab('payments')" *ngIf="isSellerView">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M4 10.781c.148 1.667 1.513 2.85 3.087 3.22.524.124 1.054.167 1.584.167.53 0 1.06-.043 1.584-.167 1.574-.37 2.939-1.553 3.087-3.22.148-1.667-.5-3.125-1.781-4.305l-.02-.018C10.587 4.31 9.34 3.5 8 3.5c-1.34 0-2.587.81-3.207 2.007l-.02.018C3.5 6.662 2.852 8.12 3 9.781z"/>
+        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+      </svg>
+      Payments
+    </button>
+  </div>
+
+  <!-- Profile Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'profile' && !isSellerView">
+    <div class="profile-section">
+      <h2>Modify Profile Information</h2>
+      <div class="profile-form-container">
+        <!-- Profile Image Section -->
+        <div class="image-upload-section">
+          <div class="image-preview-container">
+            <img [src]="imagePreview || clientInfo.avatar" alt="Profile Image" class="profile-image-preview">
+          </div>
+          <div class="image-upload-controls">
+            <label for="avatar-upload" class="upload-btn">
+              Choose Image
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" (change)="onFileSelected($event)" class="file-input">
+            <button class="upload-btn" (click)="uploadImage()" [disabled]="!selectedFile">
+              Upload Image
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Form -->
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-edit-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': profileForm.get('name')?.touched && profileForm.get('name')?.invalid }">
+            <div class="invalid-feedback" *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid">
+              <div *ngIf="profileForm.get('name')?.errors?.['required']">Name is required.</div>
+              <div *ngIf="profileForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters long.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': profileForm.get('email')?.touched && profileForm.get('email')?.invalid }">
+            <div class="invalid-feedback" *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid">
+              <div *ngIf="profileForm.get('email')?.errors?.['required']">Email is required.</div>
+              <div *ngIf="profileForm.get('email')?.errors?.['email']">Please enter a valid email address.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid }">
+            <div class="invalid-feedback" *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid">
+              <div *ngIf="profileForm.get('phone')?.errors?.['required']">Phone number is required.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <textarea
+              id="address"
+              formControlName="address"
+              rows="3"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': profileForm.get('address')?.touched && profileForm.get('address')?.invalid }"></textarea>
+            <div class="invalid-feedback" *ngIf="profileForm.get('address')?.touched && profileForm.get('address')?.invalid">
+              <div *ngIf="profileForm.get('address')?.errors?.['required']">Address is required.</div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">
+              Save Changes
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="profileForm.reset()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller Profile Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'profile' && isSellerView">
+    <div class="profile-section">
+      <h2>Seller Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Business Name</label>
+          <p>ProTech Solutions</p>
+        </div>
+        <div class="info-item">
+          <label>Contact Email</label>
+          <p>{{ clientInfo.email }}</p>
+        </div>
+        <div class="info-item">
+          <label>Phone Number</label>
+          <p>{{ clientInfo.phone }}</p>
+        </div>
+        <div class="info-item">
+          <label>Business Address</label>
+          <p>{{ clientInfo.address }}</p>
+        </div>
+        <div class="info-item">
+          <label>Member Since</label>
+          <p>{{ clientInfo.memberSince }}</p>
+        </div>
+        <div class="info-item">
+          <label>Total Products</label>
+          <p>{{ sellerStats.totalProducts }}</p>
+        </div>
+        <div class="info-item">
+          <label>Average Rating</label>
+          <p>4.8/5.0</p>
+        </div>
+        <div class="info-item">
+          <label>Verified Status</label>
+          <p><span class="status-badge success">Verified</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'orders' && !isSellerView">
+    <div class="profile-section">
+      <h2>Order History</h2>
+      <div class="history-container">
+        <div class="order-card" *ngFor="let order of orderHistory">
+          <div class="order-header">
+            <div class="order-id">Order #{{ order.id }}</div>
+            <div class="order-date">{{ order.date | date:'mediumDate' }}</div>
+            <div class="order-status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</div>
+          </div>
+          <div class="order-items">
+            <div class="item" *ngFor="let item of order.items">
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-quantity">x{{ item.quantity }}</span>
+              <span class="item-price">{{ item.price | currency:'TND' }}</span>
+            </div>
+          </div>
+          <div class="order-total">
+            <span>Total: </span>
+            <span class="total-amount">{{ order.total | currency:'TND' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller Dashboard Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'seller' && isSellerView">
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-info">
+          <h3>{{ sellerStats.totalProducts }}</h3>
+          <p>Products</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏷️</div>
+        <div class="stat-info">
+          <h3>{{ sellerStats.totalCategories }}</h3>
+          <p>Categories</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-info">
+          <h3>{{ sellerStats.totalReviews }}</h3>
+          <p>Reviews</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+          <h3>{{ sellerStats.totalRevenue | currency:'TND' }}</h3>
+          <p>Revenue</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-sections">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Products Management</h2>
+          <div>
+            <button class="btn btn-primary">Add New Product</button>
+            <button class="btn btn-primary" (click)="testNotification()" style="margin-left: 10px;">Test Notification</button>
+          </div>
+        </div>
+        <div class="section-content">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of sellerProducts">
+                <td>{{ product.name }}</td>
+                <td>{{ product.price | currency:'TND' }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.category }}</td>
+                <td><span class="status-badge active">{{ product.status }}</span></td>
+                <td>
+                  <button class="action-btn edit">Edit</button>
+                  <button class="action-btn delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Categories Management</h2>
+          <button class="btn btn-primary">Add New Category</button>
+        </div>
+        <div class="section-content">
+          <div class="categories-list">
+            <div class="category-item" *ngFor="let i of [1,2,3,4,5]">
+              <span>Category {{ i }}</span>
+              <div class="category-actions">
+                <button class="action-btn edit">Edit</button>
+                <button class="action-btn delete">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'reviews' && isSellerView">
+    <div class="profile-section">
+      <h2>Customer Reviews</h2>
+      <div class="reviews-list">
+        <div class="review-item" *ngFor="let review of reviews">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <span class="reviewer-name">{{ review.reviewer }}</span>
+              <span class="review-product">{{ review.productName }}</span>
+            </div>
+            <div class="review-rating">
+              <span *ngFor="let star of [].constructor(5); let i = index"
+                    class="star" [ngClass]="{'filled': i < review.rating}">
+                ★
+              </span>
+            </div>
+          </div>
+          <p class="review-comment">{{ review.comment }}</p>
+          <div class="review-date">{{ review.date | date:'mediumDate' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payments Tab Content -->
+  <div class="profile-content" *ngIf="activeTab === 'payments' && isSellerView">
+    <div class="profile-section">
+      <h2>Payment History</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let payment of payments">
+            <td>{{ payment.id }}</td>
+            <td>{{ payment.date | date:'mediumDate' }}</td>
+            <td>{{ payment.amount | currency:'TND' }}</td>
+            <td>{{ payment.method }}</td>
+            <td><span class="status-badge" [ngClass]="payment.status.toLowerCase()">{{ payment.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

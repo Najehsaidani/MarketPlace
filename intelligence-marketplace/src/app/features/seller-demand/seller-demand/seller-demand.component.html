@@ -1,0 +1,49 @@
+<div class="seller-demand-container">
+  <div class="seller-demand-header">
+    <h2>Demandes de Vendeurs</h2>
+    <p>Gérez les demandes des clients souhaitant devenir vendeurs</p>
+  </div>
+
+  <div class="seller-demand-content">
+    <!-- Loading State -->
+    <div class="loading" *ngIf="loading">
+      <p>Chargement des demandes...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Requests List -->
+    <div class="requests-list" *ngIf="!loading && !error">
+      <div class="request-card" *ngFor="let request of sellerRequests">
+        <div class="request-header">
+          <h3>{{ request.clientName }}</h3>
+          <span class="status-badge" [ngClass]="request.status">
+            {{ request.status === 'pending' ? 'En attente' : 
+               request.status === 'approved' ? 'Approuvée' : 'Rejetée' }}
+          </span>
+        </div>
+        
+        <div class="request-details">
+          <p><strong>Email:</strong> {{ request.email }}</p>
+          <p><strong>Date de demande:</strong> {{ request.requestDate | date:'mediumDate' }}</p>
+        </div>
+        
+        <div class="request-actions" *ngIf="request.status === 'pending'">
+          <button class="btn btn-success" (click)="approveRequest(request.id)">
+            Approuver
+          </button>
+          <button class="btn btn-danger" (click)="rejectRequest(request.id)">
+            Rejeter
+          </button>
+        </div>
+      </div>
+      
+      <div class="no-requests" *ngIf="sellerRequests.length === 0">
+        <p>Aucune demande de vendeur pour le moment.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="seller-notifications-container">
+  <div class="seller-notifications-header">
+    <h2>Notifications Vendeur</h2>
+    <p>Toutes vos notifications en tant que vendeur</p>
+  </div>
+
+  <div class="seller-notifications-content">
+    <div class="notifications-header">
+      <h3>Notifications</h3>
+      <button (click)="clearAll()" class="clear-btn" [disabled]="notifications.length === 0">
+        Tout effacer
+      </button>
+    </div>
+    
+    <div class="notifications-list" *ngIf="notifications.length > 0; else noNotifications">
+      <div 
+        *ngFor="let notification of notifications" 
+        class="notification-item" 
+        [ngClass]="'notification-' + notification.type"
+      >
+        <div class="notification-content">
+          <div class="notification-message">{{ notification.message }}</div>
+          <button 
+            class="close-btn" 
+            (click)="removeNotification(notification.id)"
+            aria-label="Fermer la notification"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template #noNotifications>
+      <div class="no-notifications">
+        <p>Vous n'avez aucune notification</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

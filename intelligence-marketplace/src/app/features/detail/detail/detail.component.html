@@ -1,0 +1,220 @@
+<div class="detail-page" *ngIf="!loading && product">
+  <div class="detail-header">
+    <button class="back-btn" routerLink="/catalogue">&#10094;</button>
+    <h2 class="page-title">Détails du Produit</h2>
+  </div>
+
+  <div class="product-container card">
+    <div class="product-image-area">
+      <!-- Main Image Display -->
+      <div class="main-image-container" *ngIf="product.images && product.images.length > 0">
+        <img [src]="selectedImage?.url || product.images[0].url" [alt]="product.name" class="product-image">
+      </div>
+      <!-- Fallback to placeholder if no images -->
+      <div *ngIf="!product.images || product.images.length === 0" class="placeholder-img">🖼️</div>
+
+      <!-- Thumbnail Gallery -->
+      <div class="thumbnail-gallery" *ngIf="product.images && product.images.length > 1">
+        <div class="thumbnail-container">
+          <img
+            *ngFor="let image of product.images; let i = index"
+            [src]="image.url"
+            [alt]="'Image ' + (i + 1) + ' of ' + product.name"
+            class="thumbnail"
+            [ngClass]="{'active': image.url === (selectedImage?.url || product.images[0].url)}"
+            (click)="selectImage(image)">
+        </div>
+      </div>
+    </div>
+    <div class="product-info-area">
+      <h1 class="product-name">{{ product.name }}</h1>
+      <p class="product-seller">Vendu par: <strong>Vendeur Pro X</strong></p>
+
+      <!-- Rating Summary -->
+      <div class="rating-summary">
+        <div class="average-rating">
+          <span class="rating-value">{{ getAverageRating() | number:'1.1-1' }}</span>
+          <div class="stars">
+            <span *ngFor="let star of [].constructor(5); let i = index"
+                  class="star"
+                  [ngClass]="{'filled': i < getAverageRating()}">
+              ★
+            </span>
+          </div>
+          <span class="review-count">({{ reviews.length }} avis)</span>
+        </div>
+      </div>
+
+      <p class="product-price">Prix DT: <strong>{{ product.price | number: '1.2-2' }} dt</strong></p>
+
+      <div class="actions">
+        <button class="add-to-cart-btn btn btn-primary" (click)="addToCart()">
+          Ajouter au panier +
+        </button>
+        <button class="chat-btn btn btn-outline" (click)="startChat()" id="chatButton">
+          Chat avec le vendeur 💬
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="description-section card">
+    <h2>Description:</h2>
+    <p>{{ product.description }}</p>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section card">
+    <h2>Avis des Clients</h2>
+
+    <!-- Review Summary -->
+    <div class="review-summary">
+      <div class="average-box">
+        <div class="average-rating-large">{{ getAverageRating() | number:'1.1-1' }}</div>
+        <div class="stars-large">
+          <span *ngFor="let star of [].constructor(5); let i = index"
+                class="star"
+                [ngClass]="{'filled': i < getAverageRating()}">
+            ★
+          </span>
+        </div>
+        <div class="review-count-large">{{ reviews.length }} avis</div>
+      </div>
+
+      <div class="rating-distribution">
+        <div *ngFor="let i of [5,4,3,2,1]" class="rating-bar">
+          <span class="rating-label">{{ i }} étoiles</span>
+          <div class="bar-container">
+            <div class="bar" [style.width.%]="reviews.length ? (getRatingCounts()[i] / reviews.length * 100) : 0"></div>
+          </div>
+          <span class="rating-count">{{ getRatingCounts()[i] }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Review Form -->
+    <div class="add-review-form">
+      <h3>Ajouter votre avis</h3>
+      <form (ngSubmit)="submitReview()" #reviewForm="ngForm">
+        <div class="rating-input">
+          <label>Note:</label>
+          <div class="stars-input">
+            <span *ngFor="let star of [].constructor(5); let i = index"
+                  class="star"
+                  [ngClass]="{'filled': i < newReview.rating}"
+                  (click)="newReview.rating = i + 1">
+              ★
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comment">Commentaire:</label>
+          <textarea id="comment"
+                    [(ngModel)]="newReview.comment"
+                    name="comment"
+                    rows="4"
+                    required
+                    placeholder="Partagez votre expérience avec ce produit..."></textarea>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                [disabled]="isSubmittingReview || !newReview.comment.trim()">
+          {{ isSubmittingReview ? 'Envoi en cours...' : 'Soumettre l\'avis' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-list">
+      <h3>Avis récents</h3>
+      <div *ngIf="reviews.length === 0" class="no-reviews">
+        <p>Aucun avis pour ce produit pour le moment.</p>
+      </div>
+
+      <div *ngFor="let review of reviews" class="review-item">
+        <div class="review-header">
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">
+              <span>{{ review.userName?.charAt(0) || 'U' }}</span>
+            </div>
+            <div class="reviewer-details">
+              <div class="reviewer-name">{{ review.userName || 'Utilisateur' }}</div>
+              <div class="review-date">{{ review.createdAt | date:'mediumDate' }}</div>
+            </div>
+          </div>
+          <div class="review-rating">
+            <span *ngFor="let star of [].constructor(5); let i = index"
+                  class="star"
+                  [ngClass]="{'filled': i < review.rating}">
+              ★
+            </span>
+          </div>
+        </div>
+        <div class="review-content">
+          <p>{{ review.comment }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="loading" *ngIf="loading">
+  <p>Chargement du produit...</p>
+</div>
+
+<div class="error" *ngIf="!loading && error">
+  <p>{{ error }}</p>
+</div>
+
+<!-- Chat Popup -->
+<div class="chat-popup" *ngIf="isChatOpen">
+  <div class="popup-content">
+    <div class="popup-header">
+      <h3>Chat avec {{ sellerName }}</h3>
+      <button class="close-btn" (click)="toggleChat()">×</button>
+    </div>
+    <div class="popup-body">
+      <div class="chat-container">
+        <div class="chat-messages" #messagesContainer>
+          <div *ngIf="isLoadingMessages" class="no-messages">
+            <p>Chargement des messages...</p>
+          </div>
+
+          <div *ngIf="!isLoadingMessages && messages.length === 0" class="no-messages">
+            <p>Aucun message pour le moment. Commencez la conversation !</p>
+          </div>
+
+          <div *ngFor="let message of messages"
+               class="chat-message"
+               [ngClass]="{'sent': message.isOwn, 'received': !message.isOwn}">
+            <div class="message-bubble">
+              <div class="message-sender">{{ message.sender }}</div>
+              <div class="message-content">{{ message.content }}</div>
+              <div class="message-time">{{ message.timestamp | date:'HH:mm' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <input
+            type="text"
+            class="chat-input"
+            placeholder="Tapez votre message..."
+            [(ngModel)]="newMessage"
+            (keyup.enter)="sendMessage()"
+            [disabled]="isLoadingMessages">
+          <button
+            class="send-button"
+            (click)="sendMessage()"
+            [disabled]="!newMessage.trim() || isLoadingMessages">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 3.996 2.25 9.002l4.835 3.504L14.75 3.649 6.636 3.996Z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

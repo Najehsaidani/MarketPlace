@@ -1,0 +1,9 @@
+.content-area {
+      min-height: calc(100vh - 120px); /* Assurez-vous que le contenu remplit l'écran */
+      padding: 20px;
+    }
+    /* Styles généraux du corps (Body) pour un design moderne */
+    :host {
+      font-family: Arial, sans-serif;
+      color: #333;
+    }

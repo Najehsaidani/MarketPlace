@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1><i class="fas fa-comments"></i> Chat Application</h1>
+            <p>Connect with clients and sellers</p>
+        </header>
+
+        <div class="login-section" id="login-section">
+            <div class="login-card">
+                <h2><i class="fas fa-sign-in-alt"></i> Login to Chat</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="userId"><i class="fas fa-user"></i> Your User ID (from UsersService):</label>
+                        <input type="number" id="userId" name="userId" required placeholder="Enter your user ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userType"><i class="fas fa-user-tag"></i> User Type:</label>
+                        <select id="userType" name="userType" required>
+                            <option value="">Select your user type</option>
+                            <option value="client">Client</option>
+                            <option value="seller">Seller</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check-circle"></i> Validate and Enter Chat
+                    </button>
+                    <div id="validation-message" class="validation-message"></div>
+                    <div id="success-message" class="success-message"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="chat-container hidden" id="chat-container">
+            <div class="users-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-users"></i> Available Users</h3>
+                </div>
+                <div class="users-search">
+                    <input type="text" id="user-search" placeholder="Search users...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="users-list-container">
+                    <div class="user-category">
+                        <h4><i class="fas fa-user-friends"></i> Clients</h4>
+                        <ul class="user-list" id="clients-list">
+                            <!-- Clients will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="user-category">
+                        <h4><i class="fas fa-store"></i> Sellers</h4>
+                        <ul class="user-list" id="sellers-list">
+                            <!-- Sellers will be populated here -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="user-info-panel">
+                    <div class="current-user-info">
+                        <p>Logged in as: <span id="current-user-info"></span></p>
+                    </div>
+                    <button id="logout-btn" class="btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-panel">
+                <div class="chat-header" id="chat-header">
+                    <h3><i class="fas fa-comment-dots"></i> Select a user to start chatting</h3>
+                </div>
+                
+                <div class="chat-messages hidden" id="chat-messages">
+                    <!-- Messages will be displayed here -->
+                </div>
+                
+                <form id="message-form" class="hidden">
+                    <div class="message-input">
+                        <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+                        <button type="submit" class="btn-send">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h3>Chat avec le vendeur</h3>
+    <div class="user-info">
+      <span>Connecté en tant que: <strong>User {{ currentUserId }}</strong></span>
+      <button (click)="switchUser()" class="switch-user-btn">Changer</button>
+    </div>
+    <div class="connection-status" [ngClass]="{ 'connected': isConnected, 'disconnected': !isConnected }">
+      {{ isConnected ? 'Connecté' : 'Déconnecté' }}
+    </div>
+  </div>
+
+  <div class="messages-container">
+    <div *ngFor="let msg of messages" class="message" [ngClass]="{'sent': msg.senderId === currentUserId, 'received': msg.senderId !== currentUserId}">
+      <div class="message-content">
+        <p class="message-text">{{ msg.content }}</p>
+        <span class="message-time">{{ msg.timestamp | date:'short' }}</span>
+      </div>
+      <div class="message-sender">{{ msg.senderName || 'User ' + msg.senderId }}</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input
+      [(ngModel)]="newMessage"
+      (keyup.enter)="sendMessage()"
+      placeholder="Écrire un message..."
+      class="message-input"
+    />
+    <button (click)="sendMessage()" class="send-btn" [disabled]="!newMessage.trim() || !isConnected">
+      Envoyer
+    </button>
+  </div>
+</div>

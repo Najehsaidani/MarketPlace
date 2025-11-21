@@ -1,0 +1,106 @@
+<div class="cart-page">
+  <div class="cart-header">
+    <h1>Votre Panier</h1>
+    <p class="cart-subtitle">Gérez vos articles avant de passer commande</p>
+  </div>
+
+  <div class="cart-nav">
+    <a routerLink="/" class="nav-link">Accueil</a>
+    <a routerLink="/catalogue" class="nav-link">Catalogue</a>
+    <a class="nav-link active">Panier</a>
+  </div>
+
+  <div class="cart-summary">
+    <div class="summary-card">
+      <div class="summary-item">
+        <span class="summary-label">Nombre de vendeurs:</span>
+        <span class="summary-value">{{ carts.length }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Nombre total d'articles:</span>
+        <span class="summary-value">{{ getTotalItems() }}</span>
+      </div>
+      <div class="summary-item total">
+        <span class="summary-label">Total:</span>
+        <span class="summary-value total-amount">{{ getTotalPrice() | currency:'TND' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vendor-search-bar">
+    <input type="text" placeholder="Chercher le nom du vendeur..." [(ngModel)]="vendorSearchTerm">
+    <button class="search-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="cart-content-wrapper" *ngIf="carts.length > 0; else emptyCart">
+    <div class="vendor-cart" *ngFor="let vendor of carts ">
+      <div class="vendor-header">
+        <h3>{{ vendor.vendorName }} <span class="item-count">({{ vendor.products.length }} article{{ vendor.products.length > 1 ? 's' : '' }})</span></h3>
+        <div class="product-search-bar">
+          <input type="text" placeholder="Chercher le nom du produit" [(ngModel)]="vendor.productSearchTerm">
+          <button class="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="cart-items-container">
+        <div class="cart-item" *ngFor="let item of vendor.products ">
+          <div class="item-details">
+            <div class="item-img-placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 4.754a3.303 3.303 0 0 0-3.284 3.308 3.304 3.304 0 0 0 3.284 3.308 3.304 3.304 0 0 0 3.284-3.308A3.303 3.303 0 0 0 8 4.754zm0 5.5a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z"/>
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                <path d="M13.468 4.054a.5.5 0 0 0-.686.686l.034.034A5.47 5.47 0 0 1 13.5 8a5.47 5.47 0 0 1-.68 2.226l-.034.034a.5.5 0 0 0 .686.686l.034-.034A6.47 6.47 0 0 0 14.5 8a6.47 6.47 0 0 0-.998-3.298l-.034-.034zm-2.828 0a.5.5 0 0 0-.686.686l.034.034A2.47 2.47 0 0 1 10.5 8a2.47 2.47 0 0 1-.55 1.278l-.034.034a.5.5 0 0 0 .686.686l.034-.034A3.47 3.47 0 0 0 11.5 8a3.47 3.47 0 0 0-.96-2.278l-.034-.034zM7 4a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H7zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H7zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H7zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H7z"/>
+              </svg>
+            </div>
+            <span class="product-name">{{ item.name }}</span>
+          </div>
+          <div class="item-price">{{ item.price | currency:'TND' }}</div>
+          <div class="item-quantity-control">
+            <button class="quantity-btn minus-btn" (click)="decreaseQuantity(vendor.vendorId, item.id)" aria-label="Diminuer la quantité">-</button>
+            <input type="number" [value]="item.quantity" min="1" class="quantity-input" (change)="updateQuantity(vendor.vendorId, item.id, $event)" placeholder="Quantité" title="Quantité du produit" aria-label="Quantité du produit">
+            <button class="quantity-btn plus-btn" (click)="increaseQuantity(vendor.vendorId, item.id)" aria-label="Augmenter la quantité">+</button>
+          </div>
+          <div class="item-total">{{ (item.price * item.quantity) | currency:'TND' }}</div>
+          <button class="delete-btn" (click)="removeItem(vendor.vendorId, item.id)" aria-label="Supprimer l'article">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="vendor-footer">
+        <div class="vendor-total">
+          <span>Total vendeur:</span>
+          <span class="total-amount">{{ getVendorTotal(vendor.vendorId) | currency:'TND' }}</span>
+        </div>
+        <button class="order-btn" (click)="orderFromVendor(vendor.vendorId)">
+          Commander chez {{ vendor.vendorName }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <div class="empty-cart-icon">🛒</div>
+      <h2>Votre panier est vide</h2>
+      <p>Commencez à ajouter des articles depuis le catalogue</p>
+      <a routerLink="/catalogue" class="btn btn-primary">Explorer le catalogue</a>
+    </div>
+  </ng-template>
+
+  <div class="cart-actions" *ngIf="carts.length > 0">
+    <button class="btn btn-secondary" (click)="clearCart()">Vider le panier</button>
+    <button class="btn btn-primary order-all-btn" (click)="orderAll()">Commander tout</button>
+  </div>
+</div>

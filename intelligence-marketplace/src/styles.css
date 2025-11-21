@@ -1,0 +1,307 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Primary color palette */
+  --primary-purple: #4F46E5;
+  --primary-blue: #3B82F6;
+  --accent-cyan: #06B6D4;
+  --text-dark: #2D2D2D;
+
+  /* Secondary color palette */
+  --primary-color: #4F46E5; /* Using primary-purple as primary */
+  --primary-dark: #4338ca; /* Darker purple for hover states */
+  --primary-light: #6366f1; /* Lighter purple for subtle backgrounds */
+  --secondary-color: #3B82F6; /* Using primary-blue as secondary */
+  --secondary-dark: #2563eb; /* Darker blue */
+
+  /* Neutral colors */
+  --background-light: #f8fafc; /* Light background */
+  --background-dark: #f1f5f9; /* Slightly darker background */
+  --text-medium: #64748b; /* Medium text */
+  --text-light: #94a3b8; /* Light text */
+
+  /* Status colors */
+  --success-color: #10b981; /* Green for success */
+  --warning-color: #f59e0b; /* Amber for warnings */
+  --error-color: #ef4444; /* Red for errors */
+
+  /* Borders and shadows */
+  --border-color: #e2e8f0;
+  --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-heavy: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* New color additions for richer design */
+  --accent-color: #06B6D4; /* Using accent-cyan as accent */
+  --accent-dark: #0e7490; /* Darker cyan */
+  --gradient-start: #4F46E5; /* Gradient start */
+  --gradient-end: #3B82F6; /* Gradient end */
+}
+
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Content area styling */
+.content-area {
+  min-height: calc(100vh - 160px); /* Adjust based on header and footer height */
+  padding: 20px 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-purple), var(--accent-color));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+}
+
+/* Gradient text */
+.h1 {
+  background: linear-gradient(to right, #4F46E5, #3B82F6, #06B6D4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Enhanced button styles */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-blue));
+  color: white;
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--secondary-dark));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
+}
+
+.btn-secondary {
+  background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+  color: white;
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(45deg, var(--secondary-dark), var(--accent-dark));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-heavy);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-blue));
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Card styling for consistent UI components */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-medium);
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-purple), var(--accent-color));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-heavy);
+  transform: translateY(-5px);
+}
+
+/* Section styling */
+.section {
+  padding: 60px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, #4F46E5, #3B82F6, #06B6D4);
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-medium);
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Animation utilities */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Grid system */
+.grid {
+  display: grid;
+  gap: 30px;
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Media queries for responsive design */
+@media (max-width: 1200px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .content-area {
+    min-height: calc(100vh - 200px);
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
