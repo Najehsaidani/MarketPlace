@@ -1,0 +1,41 @@
+.content {
+    position: relative;
+    width: calc(100% - 230px);
+    left: 230px;
+    transition: all 0.3s ease;
+    padding-top: 56px; /* Account for navbar height */
+    min-height: calc(100vh - 56px);
+}
+
+.content.close {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+main {
+    padding: 24px;
+    width: 100%;
+}
+
+.bottom-data {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .bottom-data {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        width: 100%;
+        left: 0;
+    }
+
+    .content.close {
+        width: 100%;
+        left: 0;
+    }
+}

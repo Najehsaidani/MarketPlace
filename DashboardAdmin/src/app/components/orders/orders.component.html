@@ -1,0 +1,149 @@
+<div class="orders-container">
+    <div class="table-container">
+        <!-- Mobile view - Card layout -->
+        <div class="mobile-orders-grid">
+            <div class="order-card">
+                <div class="order-card-content">
+                    <div class="order-user">
+                        <div class="user-avatar-placeholder">
+                            <i class='bx bx-user'></i>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">John Doe</span>
+                            <span class="order-date">14-08-2023</span>
+                        </div>
+                    </div>
+                    <div class="order-details">
+                        <span class="order-amount">€125.00</span>
+                        <span class="status-badge status-completed">
+                            <i class='bx bx-check-circle'></i>
+                            Complété
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-card">
+                <div class="order-card-content">
+                    <div class="order-user">
+                        <div class="user-avatar-placeholder">
+                            <i class='bx bx-user'></i>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">Jane Smith</span>
+                            <span class="order-date">13-08-2023</span>
+                        </div>
+                    </div>
+                    <div class="order-details">
+                        <span class="order-amount">€89.50</span>
+                        <span class="status-badge status-pending">
+                            <i class='bx bx-time'></i>
+                            En attente
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-card">
+                <div class="order-card-content">
+                    <div class="order-user">
+                        <div class="user-avatar-placeholder">
+                            <i class='bx bx-user'></i>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">Robert Johnson</span>
+                            <span class="order-date">12-08-2023</span>
+                        </div>
+                    </div>
+                    <div class="order-details">
+                        <span class="order-amount">€210.75</span>
+                        <span class="status-badge status-processing">
+                            <i class='bx bx-cog'></i>
+                            En cours
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop view - Table layout -->
+        <table class="table orders-table desktop-table">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="order-row">
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar-placeholder">
+                                <i class='bx bx-user'></i>
+                            </div>
+                            <span class="user-name">John Doe</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="order-date">14-08-2023</span>
+                    </td>
+                    <td>
+                        <span class="order-amount">€125.00</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-completed">
+                            <i class='bx bx-check-circle'></i>
+                            Complété
+                        </span>
+                    </td>
+                </tr>
+                <tr class="order-row">
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar-placeholder">
+                                <i class='bx bx-user'></i>
+                            </div>
+                            <span class="user-name">Jane Smith</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="order-date">13-08-2023</span>
+                    </td>
+                    <td>
+                        <span class="order-amount">€89.50</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-pending">
+                            <i class='bx bx-time'></i>
+                            En attente
+                        </span>
+                    </td>
+                </tr>
+                <tr class="order-row">
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar-placeholder">
+                                <i class='bx bx-user'></i>
+                            </div>
+                            <span class="user-name">Robert Johnson</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="order-date">12-08-2023</span>
+                    </td>
+                    <td>
+                        <span class="order-amount">€210.75</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-processing">
+                            <i class='bx bx-cog'></i>
+                            En cours
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

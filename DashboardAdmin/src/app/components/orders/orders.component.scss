@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.orders-container {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+// Use the global .table class for consistent styling
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.orders-table thead {
+    background: rgba(79, 70, 229, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px 12px 0 0;
+}
+
+.orders-table th {
+    background: linear-gradient(135deg, var(--primary), var(--primary-blue));
+    color: white;
+    text-align: left;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.orders-table th::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.orders-table th:hover::after {
+    left: 100%;
+}
+
+.orders-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--grey);
+    font-size: 16px;
+    color: var(--dark);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+.orders-table tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table tr:nth-child(even) {
+    background-color: rgba(79, 70, 229, 0.05);
+}
+
+.orders-table tr:hover {
+    background-color: rgba(79, 70, 229, 0.1);
+    border-left: 3px solid var(--primary);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+// User info styling
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-grey);
+    font-size: 18px;
+}
+
+.user-name {
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+}
+
+.order-date {
+    font-size: 14px;
+    color: var(--dark-grey);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+.order-amount {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+}
+
+// Status badges with icons
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Inter', sans-serif;
+}
+
+.status-completed {
+    background: linear-gradient(135deg, var(--success), #059669);
+    color: white;
+}
+
+.status-pending {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    color: white;
+}
+
+.status-processing {
+    background: linear-gradient(135deg, var(--primary), var(--primary-blue));
+    color: white;
+}
+
+// Mobile order cards
+.mobile-orders-grid {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.order-card {
+    border: 1px solid var(--grey);
+    border-radius: 12px;
+    padding: 16px;
+    background: var(--light);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.order-card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+    border-color: var(--primary);
+}
+
+.order-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.order-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .desktop-table {
+        display: none;
+    }
+
+    .mobile-orders-grid {
+        display: grid;
+    }
+
+    .orders-table {
+        min-width: 800px;
+    }
+
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .user-avatar-placeholder {
+        width: 36px;
+        height: 36px;
+    }
+}

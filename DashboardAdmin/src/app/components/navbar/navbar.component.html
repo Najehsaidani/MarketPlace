@@ -1,0 +1,40 @@
+<!-- Navbar -->
+<nav>
+    <div class="nav-left">
+        <i class='bx bx-menu' (click)="toggleSidebar()"></i>
+    </div>
+    <div class="nav-center">
+        <form action="#">
+            <div class="form-input">
+                <input type="search" placeholder="Search...">
+                <button class="search-btn" type="submit" aria-label="Search"><i class='bx bx-search'></i></button>
+            </div>
+        </form>
+    </div>
+    <div class="nav-right">
+        <div class="theme-toggle" (click)="toggleTheme()">
+            <i class='bx bx-sun' id="light-mode-icon"></i>
+            <i class='bx bx-moon' id="dark-mode-icon"></i>
+        </div>
+        <a href="#" class="notif">
+            <i class='bx bx-bell'></i>
+            <span class="count">12</span>
+        </a>
+        <div class="profile-dropdown">
+            <a href="#" class="profile">
+                <img src="assets/images/logo.png" alt="Profile">
+            </a>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class='bx bx-user'></i>
+                    Mon profil
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class='bx bx-cog'></i>
+                    Paramètres
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- End of Navbar -->

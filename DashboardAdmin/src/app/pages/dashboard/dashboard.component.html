@@ -1,0 +1,303 @@
+<div class="content">
+    <app-navbar></app-navbar>
+
+    <main>
+        <div class="app-container">
+            <!-- Header -->
+            <div class="header-section">
+                <div class="header-content">
+                    <div>
+                        <h1 class="header-title">Tableau de bord</h1>
+                        <p class="header-subtitle">Aperçu des performances et activités de votre marketplace</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Revenu total</p>
+                            <p class="stat-value">€12,450</p>
+                        </div>
+                        <div class="stat-icon bg-blue">
+                            <i class='bx bx-dollar'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Commandes</p>
+                            <p class="stat-value">1,074</p>
+                        </div>
+                        <div class="stat-icon bg-purple">
+                            <i class='bx bx-cart'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Produits</p>
+                            <p class="stat-value">3,241</p>
+                        </div>
+                        <div class="stat-icon bg-green">
+                            <i class='bx bx-package'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Clients</p>
+                            <p class="stat-value">8,321</p>
+                        </div>
+                        <div class="stat-icon bg-yellow">
+                            <i class='bx bx-user'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="dashboard-grid">
+                <!-- Left Column - Orders and Products -->
+                <div class="dashboard-left">
+                    <!-- Recent Orders -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Commandes récentes</h2>
+                            <a href="/admin/orders" class="view-all-link">
+                                Voir tout
+                                <i class='bx bx-right-arrow-alt'></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <app-orders></app-orders>
+                        </div>
+                    </div>
+
+                    <!-- Top Products -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Produits populaires</h2>
+                            <a href="/admin/products" class="view-all-link">
+                                Voir tout
+                                <i class='bx bx-right-arrow-alt'></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table products-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produit</th>
+                                            <th>Ventes</th>
+                                            <th>Stock</th>
+                                            <th>Revenu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="product-info">
+                                                    <div class="product-placeholder">
+                                                        <i class='bx bx-package'></i>
+                                                    </div>
+                                                    <span class="product-name">Smartphone XYZ</span>
+                                                </div>
+                                            </td>
+                                            <td>124</td>
+                                            <td>42</td>
+                                            <td>€2,480</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="product-info">
+                                                    <div class="product-placeholder">
+                                                        <i class='bx bx-laptop'></i>
+                                                    </div>
+                                                    <span class="product-name">Ordinateur portable</span>
+                                                </div>
+                                            </td>
+                                            <td>87</td>
+                                            <td>18</td>
+                                            <td>€4,350</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="product-info">
+                                                    <div class="product-placeholder">
+                                                        <i class='bx bx-headphone'></i>
+                                                    </div>
+                                                    <span class="product-name">Casque audio</span>
+                                                </div>
+                                            </td>
+                                            <td>65</td>
+                                            <td>33</td>
+                                            <td>€975</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Customers and Reviews -->
+                <div class="dashboard-right">
+                    <!-- Recent Customers -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Clients récents</h2>
+                            <a href="/admin/customers" class="view-all-link">
+                                Voir tout
+                                <i class='bx bx-right-arrow-alt'></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table customers-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Commandes</th>
+                                            <th>Inscription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="customer-info">
+                                                    <div class="customer-avatar">
+                                                        <i class='bx bx-user'></i>
+                                                    </div>
+                                                    <span class="customer-name">Jean Dupont</span>
+                                                </div>
+                                            </td>
+                                            <td>5</td>
+                                            <td>12 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="customer-info">
+                                                    <div class="customer-avatar">
+                                                        <i class='bx bx-user'></i>
+                                                    </div>
+                                                    <span class="customer-name">Marie Martin</span>
+                                                </div>
+                                            </td>
+                                            <td>3</td>
+                                            <td>11 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="customer-info">
+                                                    <div class="customer-avatar">
+                                                        <i class='bx bx-user'></i>
+                                                    </div>
+                                                    <span class="customer-name">Pierre Bernard</span>
+                                                </div>
+                                            </td>
+                                            <td>7</td>
+                                            <td>10 Nov 2023</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Avis récents</h2>
+                            <a href="/admin/reviews" class="view-all-link">
+                                Voir tout
+                                <i class='bx bx-right-arrow-alt'></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table reviews-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produit</th>
+                                            <th>Client</th>
+                                            <th>Note</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="review-product">
+                                                    <span class="product-name">Smartphone XYZ</span>
+                                                </div>
+                                            </td>
+                                            <td>Jean Dupont</td>
+                                            <td>
+                                                <div class="rating">
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bx-star'></i>
+                                                    <span>4.0</span>
+                                                </div>
+                                            </td>
+                                            <td>14 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="review-product">
+                                                    <span class="product-name">Ordinateur portable</span>
+                                                </div>
+                                            </td>
+                                            <td>Marie Martin</td>
+                                            <td>
+                                                <div class="rating">
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <span>5.0</span>
+                                                </div>
+                                            </td>
+                                            <td>13 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="review-product">
+                                                    <span class="product-name">Casque audio</span>
+                                                </div>
+                                            </td>
+                                            <td>Pierre Bernard</td>
+                                            <td>
+                                                <div class="rating">
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bxs-star'></i>
+                                                    <i class='bx bx-star'></i>
+                                                    <i class='bx bx-star'></i>
+                                                    <span>3.0</span>
+                                                </div>
+                                            </td>
+                                            <td>12 Nov 2023</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

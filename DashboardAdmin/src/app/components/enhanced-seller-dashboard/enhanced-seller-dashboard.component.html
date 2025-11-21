@@ -1,0 +1,135 @@
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="dashboard-container">
+      <!-- Statistiques du vendeur -->
+      <div class="insights-section">
+        <h2>Statistiques du vendeur</h2>
+        <ul class="insights">
+          <li>
+            <i class='bx bx-package'></i>
+            <span class="info">
+              <h3>{{ totalProducts }}</h3>
+              <p>Produits publiés</p>
+            </span>
+          </li>
+          <li>
+            <i class='bx bx-check-circle'></i>
+            <span class="info">
+              <h3>{{ approvedProducts }}</h3>
+              <p>Produits approuvés</p>
+            </span>
+          </li>
+          <li>
+            <i class='bx bx-time-five'></i>
+            <span class="info">
+              <h3>{{ pendingProducts }}</h3>
+              <p>Produits en attente</p>
+            </span>
+          </li>
+          <li>
+            <i class='bx bx-dollar-circle'></i>
+            <span class="info">
+              <h3>{{ totalSales }} €</h3>
+              <p>Ventes totales</p>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Navigation rapide -->
+      <div class="quick-actions">
+        <h2>Actions rapides</h2>
+        <div class="action-cards">
+          <a routerLink="add-product" class="action-card">
+            <i class='bx bx-plus-circle'></i>
+            <h3>Ajouter un produit</h3>
+            <p>Mettre en vente un nouvel article</p>
+          </a>
+          <a routerLink="my-products" class="action-card">
+            <i class='bx bx-box'></i>
+            <h3>Mes produits</h3>
+            <p>Gérer mes articles en vente</p>
+          </a>
+          <a routerLink="orders" class="action-card">
+            <i class='bx bx-receipt'></i>
+            <h3>Commandes</h3>
+            <p>Suivre les commandes clients</p>
+          </a>
+          <a routerLink="insights" class="action-card">
+            <i class='bx bx-line-chart'></i>
+            <h3>Analyses</h3>
+            <p>Consulter les statistiques détaillées</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Produits récents -->
+      <div class="recent-products">
+        <h2>Produits récents</h2>
+        <div class="products-grid" *ngIf="recentProducts.length > 0; else noProducts">
+          <div class="product-card" *ngFor="let product of recentProducts">
+            <div class="product-image">
+              <img *ngIf="product.image" [src]="product.image" [alt]="product.name">
+              <div class="product-status" [class]="product.status.toLowerCase()">
+                {{ getStatusLabel(product.status) }}
+              </div>
+            </div>
+            <div class="product-info">
+              <h3>{{ product.name }}</h3>
+              <p class="price">{{ product.price }} €</p>
+              <p class="date">{{ formatDate(product.createdAt) }}</p>
+            </div>
+          </div>
+        </div>
+        <ng-template #noProducts>
+          <div class="no-data">
+            <p>Vous n'avez pas encore de produits.</p>
+            <a routerLink="add-product" class="btn btn-primary">Ajouter votre premier produit</a>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Commandes récentes -->
+      <div class="recent-orders">
+        <h2>Commandes récentes</h2>
+        <div class="orders-table" *ngIf="recentOrders.length > 0; else noOrders">
+          <table>
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Produit</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of recentOrders">
+                <td>{{ order.customerName }}</td>
+                <td>{{ order.productName }}</td>
+                <td>{{ formatDate(order.orderDate) }}</td>
+                <td>{{ order.amount }} €</td>
+                <td>
+                  <span class="status" [class]="order.status.toLowerCase()">{{ order.status }}</span>
+                </td>
+                <td>
+                  <button class="btn-small btn-view" (click)="viewOrderDetails(order.id)">
+                    <i class='bx bx-show'></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noOrders>
+          <div class="no-data">
+            <p>Vous n'avez pas encore de commandes.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </main>
+</div>

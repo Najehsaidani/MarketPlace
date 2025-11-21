@@ -1,0 +1,470 @@
+<div class="content">
+    <app-navbar></app-navbar>
+
+    <main>
+        <div class="app-container">
+            <!-- Header -->
+            <div class="header-section">
+                <div class="header-content">
+                    <div>
+                        <h1 class="header-title">Gestion des produits</h1>
+                        <p class="header-subtitle">Valider, refuser ou gérer les produits soumis par les vendeurs</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" (click)="openAddProductForm()">
+                            <i class='bx bx-plus'></i>
+                            Ajouter un produit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Total Produits</p>
+                            <p class="stat-value">{{ totalProducts }}</p>
+                        </div>
+                        <div class="stat-icon bg-blue">
+                            <i class='bx bx-package'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">Catégories</p>
+                            <p class="stat-value">{{ categories.length }}</p>
+                        </div>
+                        <div class="stat-icon bg-purple">
+                            <i class='bx bx-folder-plus'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">En Stock</p>
+                            <p class="stat-value">{{ inStockProducts }}</p>
+                        </div>
+                        <div class="stat-icon bg-green">
+                            <i class='bx bx-trending-up'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <p class="stat-title">En Attente</p>
+                            <p class="stat-value">{{ pendingProducts }}</p>
+                        </div>
+                        <div class="stat-icon bg-yellow">
+                            <i class='bx bx-time'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-card card">
+                <div class="filters-content">
+                    <div class="search-box">
+                        <i class='bx bx-search'></i>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Rechercher par nom ou description..."
+                            [value]="searchTerm"
+                            (input)="onSearchInput($event)"
+                        >
+                    </div>
+
+                    <select
+                        class="form-control filter-select"
+                        [value]="selectedCategory"
+                        (change)="onCategoryFilterInput($event)"
+                    >
+                        <option value="all">Toutes les catégories</option>
+                        <option *ngFor="let category of categories" [value]="category">
+                            {{ category }}
+                        </option>
+                    </select>
+
+                    <select
+                        class="form-control filter-select"
+                        [value]="statusFilter"
+                        (change)="onStatusFilterInput($event)"
+                    >
+                        <option value="ALL">Tous les statuts</option>
+                        <option value="PENDING">En attente</option>
+                        <option value="APPROVED">Approuvé</option>
+                        <option value="REJECTED">Rejeté</option>
+                    </select>
+
+                    <select
+                        class="form-control filter-select"
+                        [value]="sortBy"
+                        (change)="onSortInput($event)"
+                    >
+                        <option value="name">Trier par nom</option>
+                        <option value="price">Trier par prix</option>
+                        <option value="stock">Trier par stock</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Produits ({{ filteredProducts.length }})</h2>
+                </div>
+
+                <div class="table-container">
+                    <!-- Mobile view - Card layout -->
+                    <div class="mobile-products-grid">
+                        <div class="product-card" *ngFor="let product of filteredProducts">
+                            <div class="product-card-content" (click)="viewProductDetails(product)">
+                                <div class="product-card-image">
+                                    <img [src]="product.image" [alt]="product.name" class="product-image">
+                                </div>
+                                <div class="product-card-info">
+                                    <h3 class="product-card-name">{{ product.name }}</h3>
+                                    <p class="product-card-description">{{ product.description | slice:0:60 }}{{ product.description.length > 60 ? '...' : '' }}</p>
+                                    <div class="product-card-meta">
+                                        <span class="product-price">{{ product.price | currency:'EUR' }}</span>
+                                        <span class="status-badge" [ngClass]="{
+                                            'status-pending': product.status === 'PENDING',
+                                            'status-approved': product.status === 'APPROVED',
+                                            'status-rejected': product.status === 'REJECTED'
+                                        }">
+                                            <i class='bx' [ngClass]="{
+                                                'bx-time': product.status === 'PENDING',
+                                                'bx-check-circle': product.status === 'APPROVED',
+                                                'bx-x-circle': product.status === 'REJECTED'
+                                            }"></i>
+                                            {{ product.status === 'PENDING' ? 'En attente' : product.status === 'APPROVED' ? 'Approuvé' : 'Rejeté' }}
+                                        </span>
+                                    </div>
+                                    <div class="product-card-stock">
+                                        <span>Stock: {{ product.stockQuantity || 0 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-card-actions">
+                                <button class="btn-icon" (click)="viewProductDetails(product); $event.stopPropagation()" title="Voir détails">
+                                    <i class='bx bx-show'></i>
+                                    Voir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desktop view - Table layout -->
+                    <table class="table products-table desktop-table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Statut</th>
+                                <th>Prix</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of filteredProducts" class="product-row">
+                                <td (click)="viewProductDetails(product)">
+                                    <div class="product-info">
+                                        <img [src]="product.image" [alt]="product.name" class="product-image">
+                                        <div class="product-details">
+                                            <span class="product-name">{{ product.name }}</span>
+                                            <span class="product-description">{{ product.description | slice:0:50 }}{{ product.description.length > 50 ? '...' : '' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td (click)="viewProductDetails(product)">
+                                    <span class="status-badge" [ngClass]="{
+                                        'status-pending': product.status === 'PENDING',
+                                        'status-approved': product.status === 'APPROVED',
+                                        'status-rejected': product.status === 'REJECTED'
+                                    }">
+                                        <i class='bx' [ngClass]="{
+                                            'bx-time': product.status === 'PENDING',
+                                            'bx-check-circle': product.status === 'APPROVED',
+                                            'bx-x-circle': product.status === 'REJECTED'
+                                        }"></i>
+                                        {{ product.status === 'PENDING' ? 'En attente' : product.status === 'APPROVED' ? 'Approuvé' : 'Rejeté' }}
+                                    </span>
+                                </td>
+                                <td (click)="viewProductDetails(product)">
+                                    <span class="product-price">{{ product.price | currency:'EUR' }}</span>
+                                </td>
+                                <td (click)="viewProductDetails(product)">
+                                    <span class="stock-quantity">{{ product.stockQuantity || 0 }}</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary" (click)="viewProductDetails(product); $event.stopPropagation()">
+                                        <i class='bx bx-show'></i>
+                                        Voir
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="notification" *ngIf="notificationMessage" [class.success]="notificationType === 'success'" [class.error]="notificationType === 'error'">
+                    {{ notificationMessage }}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Product Details Modal -->
+<div class="modal-overlay" *ngIf="showProductModal" (click)="closeProductModal()"></div>
+<div class="modal product-details-modal centered-modal" *ngIf="showProductModal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+        <h3>Détails du produit</h3>
+        <button class="close-modal-btn" (click)="closeProductModal()">&times;</button>
+    </div>
+    <div class="modal-body" *ngIf="selectedProduct">
+        <div class="product-detail-content">
+            <div class="product-detail-image">
+                <img [src]="selectedProduct.image" [alt]="selectedProduct.name">
+            </div>
+            <div class="product-detail-info">
+                <h4>{{ selectedProduct.name }}</h4>
+                <p class="product-detail-description">{{ selectedProduct.description }}</p>
+
+                <div class="product-detail-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Identifiant:</span>
+                        <span class="meta-value">#{{ selectedProduct.id }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Prix:</span>
+                        <span class="meta-value product-price">{{ selectedProduct.price | currency:'EUR' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Vendeur ID:</span>
+                        <span class="meta-value">{{ selectedProduct.sellerId }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Catégorie:</span>
+                        <span class="meta-value">{{ selectedProduct.categoryName || 'Non catégorisé' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Statut actuel:</span>
+                        <span class="status-badge" [ngClass]="{
+                            'status-pending': selectedProduct.status === 'PENDING',
+                            'status-approved': selectedProduct.status === 'APPROVED',
+                            'status-rejected': selectedProduct.status === 'REJECTED'
+                        }">
+                            <i class='bx' [ngClass]="{
+                                'bx-time': selectedProduct.status === 'PENDING',
+                                'bx-check-circle': selectedProduct.status === 'APPROVED',
+                                'bx-x-circle': selectedProduct.status === 'REJECTED'
+                            }"></i>
+                            {{ selectedProduct.status === 'PENDING' ? 'En attente' : selectedProduct.status === 'APPROVED' ? 'Approuvé' : 'Rejeté' }}
+                        </span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Stock:</span>
+                        <span class="meta-value">{{ selectedProduct.stockQuantity || 0 }} articles</span>
+                    </div>
+                    <div class="meta-item" *ngIf="selectedProduct.onSale">
+                        <span class="meta-label">Statut de vente:</span>
+                        <span class="meta-value">En vente</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Note moyenne:</span>
+                        <span class="meta-value">{{ selectedProduct.averageRating?.toFixed(1) || 'Aucune note' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Nombre d'avis:</span>
+                        <span class="meta-value">{{ selectedProduct.reviewCount || 0 }} avis</span>
+                    </div>
+                </div>
+
+                <div class="product-actions-section">
+                    <h5>Actions disponibles</h5>
+                    <div class="action-buttons">
+                        <button
+                            class="btn btn-primary"
+                            (click)="changeProductStatus(selectedProduct.id, 'APPROVED'); closeProductModal()"
+                            *ngIf="selectedProduct.status !== 'APPROVED'"
+                        >
+                            <i class='bx bx-check-circle'></i>
+                            Approuver
+                        </button>
+                        <button
+                            class="btn btn-reject"
+                            (click)="changeProductStatus(selectedProduct.id, 'REJECTED'); closeProductModal()"
+                            *ngIf="selectedProduct.status !== 'REJECTED'"
+                        >
+                            <i class='bx bx-x-circle'></i>
+                            Rejeter
+                        </button>
+                        <button
+                            class="btn btn-outline"
+                            (click)="changeProductStatus(selectedProduct.id, 'PENDING'); closeProductModal()"
+                            *ngIf="selectedProduct.status !== 'PENDING'"
+                        >
+                            <i class='bx bx-time'></i>
+                            Mettre en attente
+                        </button>
+                        <button class="btn btn-delete" (click)="removeProduct(selectedProduct.id); closeProductModal()">
+                            <i class='bx bx-trash'></i>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeProductModal()">
+            <i class='bx bx-x'></i>
+            Fermer
+        </button>
+    </div>
+</div>
+
+<!-- Add Product Form Modal -->
+<div class="modal-overlay" *ngIf="showAddProductForm" (click)="closeAddProductForm()"></div>
+<div class="modal product-form-modal centered-modal" *ngIf="showAddProductForm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+        <h3>Ajouter un nouveau produit</h3>
+        <button class="close-modal-btn" (click)="closeAddProductForm()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <form class="product-form">
+            <div class="form-group">
+                <label for="productName">Nom du produit</label>
+                <input
+                    type="text"
+                    id="productName"
+                    class="form-control"
+                    [(ngModel)]="productForm.name"
+                    (input)="onFormInputChange()"
+                    placeholder="Entrez le nom du produit"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Description</label>
+                <textarea
+                    id="productDescription"
+                    class="form-control"
+                    [(ngModel)]="productForm.description"
+                    (input)="onFormInputChange()"
+                    placeholder="Entrez la description du produit"
+                    rows="3"
+                ></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productPrice">Prix (€)</label>
+                    <input
+                        type="number"
+                        id="productPrice"
+                        class="form-control"
+                        [(ngModel)]="productForm.price"
+                        (input)="onFormInputChange()"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">Catégorie</label>
+                    <input
+                        type="text"
+                        id="productCategory"
+                        class="form-control"
+                        [(ngModel)]="productForm.categoryName"
+                        (input)="onFormInputChange()"
+                        placeholder="Entrez la catégorie"
+                    >
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productStock">Quantité en stock</label>
+                    <input
+                        type="number"
+                        id="productStock"
+                        class="form-control"
+                        [(ngModel)]="productForm.stockQuantity"
+                        placeholder="0"
+                        min="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">URL de l'image</label>
+                    <input
+                        type="text"
+                        id="productImage"
+                        class="form-control"
+                        [(ngModel)]="productForm.image"
+                        placeholder="Entrez l'URL de l'image"
+                    >
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productSellerId">ID du vendeur</label>
+                    <input
+                        type="text"
+                        id="productSellerId"
+                        class="form-control"
+                        [(ngModel)]="productForm.sellerId"
+                        placeholder="Entrez l'ID du vendeur"
+                    >
+                </div>
+            </div>
+
+            <div class="form-checkbox-group">
+                <label class="checkbox-label">
+                    <input
+                        type="checkbox"
+                        [(ngModel)]="productForm.inStock"
+                    >
+                    <span>En stock</span>
+                </label>
+
+                <label class="checkbox-label">
+                    <input
+                        type="checkbox"
+                        [(ngModel)]="productForm.onSale"
+                    >
+                    <span>En vente</span>
+                </label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeAddProductForm()">
+            <i class='bx bx-x'></i>
+            Annuler
+        </button>
+        <button
+            class="btn btn-primary"
+            (click)="submitProductForm()"
+            [disabled]="!isFormValid"
+        >
+            <i class='bx bx-save'></i>
+            Ajouter le produit
+        </button>
+    </div>
+</div>

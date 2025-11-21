@@ -1,0 +1,37 @@
+<div class="content">
+    <app-navbar></app-navbar>
+    
+    <main>
+        <div class="app-container">
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of products">
+                            <td>
+                                <img *ngIf="product.image" [src]="product.image"
+                                     alt="Product image" style="width: 50px; height: 50px; object-fit: cover;" />
+                            </td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }} €</td>
+                            <td>
+                                <span class="badge" [class.badge-warning]="product.status === 'PENDING'"
+                                   [class.badge-success]="product.status === 'APPROVED'"
+                                   [class.badge-error]="product.status === 'REJECTED'">
+                                    {{ product.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

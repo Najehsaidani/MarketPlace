@@ -1,0 +1,378 @@
+<!-- Main Content -->
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header-section">
+        <div class="header-content">
+          <div>
+            <h1 class="header-title">Seller Management</h1>
+            <p class="header-subtitle">Manage your seller accounts and performance</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" (click)="openAddSellerForm()">
+              <i class='bx bx-user-plus'></i>
+              Add Seller
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Sellers</p>
+              <p class="stat-value">{{ sellers.length }}</p>
+            </div>
+            <div class="stat-icon bg-blue">
+              <i class='bx bx-store'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Active Sellers</p>
+              <p class="stat-value">{{ getTotalActiveSellers() }}</p>
+            </div>
+            <div class="stat-icon bg-green">
+              <i class='bx bx-check-circle'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Blocked Sellers</p>
+              <p class="stat-value">{{ getTotalSuspendedSellers() }}</p>
+            </div>
+            <div class="stat-icon bg-red">
+              <i class='bx bx-block'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Inactive Sellers</p>
+              <p class="stat-value">{{ getTotalInactiveSellers() }}</p>
+            </div>
+            <div class="stat-icon bg-yellow">
+              <i class='bx bx-user-plus'></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters and Search -->
+      <div class="filters-card card glass-card">
+        <div class="filters-content">
+          <div class="search-box">
+            <i class='bx bx-search'></i>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search sellers..."
+              [(ngModel)]="searchTerm"
+              (input)="applyFilters()"
+            >
+          </div>
+
+          <select
+            class="form-control filter-select"
+            [(ngModel)]="selectedStatus"
+            (change)="applyFilters()"
+          >
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="suspended">Blocked</option>
+          </select>
+
+          <select
+            class="form-control filter-select"
+            [(ngModel)]="sortBy"
+            (change)="applyFilters()"
+          >
+            <option value="name">Sort by Name</option>
+            <option value="registrationDate">Sort by Join Date</option>
+            <option value="totalSales">Sort by Total Sales</option>
+            <option value="totalProducts">Sort by Products</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sellers Table -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2 class="card-title">Seller List ({{ filteredSellers.length }})</h2>
+        </div>
+
+        <div class="table-container">
+          <!-- Mobile view - Card layout -->
+          <div class="mobile-sellers-grid">
+            <div class="seller-card" *ngFor="let seller of filteredSellers">
+              <div class="seller-card-content" (click)="viewSellerDetails(seller)">
+                <div class="seller-card-image">
+                  <div class="seller-avatar">
+                    <span>{{ getSellerInitials(seller.name) }}</span>
+                  </div>
+                </div>
+                <div class="seller-card-info">
+                  <h3 class="seller-card-name">{{ seller.name }}</h3>
+                  <p class="seller-card-email">{{ seller.email }}</p>
+                  <div class="seller-card-meta">
+                    <span class="seller-id">{{ getSellerId(seller.id) }}</span>
+                    <span class="status-badge" [ngClass]="getStatusClass(seller.status)">
+                      <i class='bx' [ngClass]="getStatusIcon(seller.status)"></i>
+                      {{ seller.status }}
+                    </span>
+                  </div>
+                  <div class="seller-card-stats">
+                    <span>Products: {{ seller.totalProducts }}</span>
+                    <span>Sales: {{ seller.totalSales | currency:'TND' }}</span>
+                  </div>
+                  <div class="seller-rating">
+                    <div class="stars">
+                      <i class='bx bxs-star' *ngFor="let star of getRatingStars(seller.rating)"></i>
+                    </div>
+                    <span>{{ seller.rating }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="seller-card-actions">
+                <button class="btn-icon" (click)="viewSellerDetails(seller); $event.stopPropagation()" title="View Details">
+                  <i class='bx bx-show'></i>
+                  View
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop view - Table layout -->
+          <table class="table sellers-table desktop-table">
+            <thead>
+              <tr>
+                <th>Seller</th>
+                <th>Contact</th>
+                <th>Location</th>
+                <th>Join Date</th>
+                <th>Products</th>
+                <th>Sales</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seller of filteredSellers" class="seller-row">
+                <td (click)="viewSellerDetails(seller)">
+                  <div class="seller-info">
+                    <div class="seller-avatar">
+                      <span>{{ getSellerInitials(seller.name) }}</span>
+                    </div>
+                    <div class="seller-details">
+                      <span class="seller-name">{{ seller.name }}</span>
+                      <span class="seller-id">{{ getSellerId(seller.id) }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <div class="contact-info">
+                    <div class="contact-item">
+                      <i class='bx bx-envelope'></i>
+                      <span>{{ seller.email }}</span>
+                    </div>
+                    <div class="contact-item">
+                      <i class='bx bx-phone'></i>
+                      <span>{{ seller.phone }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <div class="location-info">
+                    <i class='bx bx-map'></i>
+                    <span>{{ seller.address }}</span>
+                  </div>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <div class="date-info">
+                    <i class='bx bx-calendar'></i>
+                    <span>{{ seller.registrationDate | date:'short' }}</span>
+                  </div>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <span class="products-count">{{ seller.totalProducts }}</span>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <span class="sales-amount">{{ seller.totalSales | currency:'TND' }}</span>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <div class="rating-info">
+                    <div class="stars">
+                      <i class='bx bxs-star' *ngFor="let star of getRatingStars(seller.rating)"></i>
+                    </div>
+                    <span>{{ seller.rating }}</span>
+                  </div>
+                </td>
+                <td (click)="viewSellerDetails(seller)">
+                  <span class="status-badge" [ngClass]="getStatusClass(seller.status)">
+                    <i class='bx' [ngClass]="getStatusIcon(seller.status)"></i>
+                    {{ seller.status }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-primary" (click)="viewSellerDetails(seller); $event.stopPropagation()">
+                    <i class='bx bx-show'></i>
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Seller Details Modal -->
+<div class="modal-overlay" *ngIf="showSellerModal" (click)="closeSellerModal()"></div>
+<div class="modal seller-details-modal centered-modal" *ngIf="showSellerModal" (click)="$event.stopPropagation()">
+  <div class="modal-header">
+    <h3>Seller Details</h3>
+    <button class="close-modal-btn" (click)="closeSellerModal()">&times;</button>
+  </div>
+  <div class="modal-body" *ngIf="selectedSeller">
+    <div class="seller-detail-content">
+      <div class="seller-detail-header">
+        <div class="seller-detail-avatar">
+          <span>{{ getSellerInitials(selectedSeller.name) }}</span>
+        </div>
+        <div class="seller-detail-info">
+          <h4>{{ selectedSeller.name }}</h4>
+          <span class="status-badge" [ngClass]="getStatusClass(selectedSeller.status)">
+            {{ selectedSeller.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="seller-detail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Seller ID:</span>
+          <span class="meta-value">{{ getSellerId(selectedSeller.id) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Email:</span>
+          <span class="meta-value">{{ selectedSeller.email }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Phone:</span>
+          <span class="meta-value">{{ selectedSeller.phone }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Address:</span>
+          <span class="meta-value">{{ selectedSeller.address }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Join Date:</span>
+          <span class="meta-value">{{ selectedSeller.registrationDate | date:'full' }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Total Products:</span>
+          <span class="meta-value">{{ selectedSeller.totalProducts }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Total Sales:</span>
+          <span class="meta-value">{{ selectedSeller.totalSales | currency:'TND' }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Rating:</span>
+          <span class="meta-value">{{ selectedSeller.rating }}</span>
+        </div>
+      </div>
+
+      <div class="seller-actions-section">
+        <h5>Actions</h5>
+        <div class="action-buttons">
+          <button
+            class="btn btn-primary"
+            (click)="activateSeller(selectedSeller.id); closeSellerModal()"
+            *ngIf="selectedSeller.status !== 'active'"
+          >
+            <i class='bx bx-check-circle'></i>
+            Activate
+          </button>
+          <button
+            class="btn btn-reject"
+            (click)="suspendSeller(selectedSeller.id); closeSellerModal()"
+            *ngIf="selectedSeller.status === 'active'"
+          >
+            <i class='bx bx-block'></i>
+            Suspend
+          </button>
+          <button class="btn btn-delete" (click)="deleteSeller(selectedSeller.id); closeSellerModal()">
+            <i class='bx bx-trash'></i>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeSellerModal()">
+      <i class='bx bx-x'></i>
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- Add Seller Modal -->
+<div class="modal-overlay" *ngIf="showAddSellerModal" (click)="closeAddSellerModal()"></div>
+<div class="modal centered-modal" *ngIf="showAddSellerModal">
+  <div class="modal-header">
+    <h3>Add New Seller</h3>
+    <button class="close-modal-btn" (click)="closeAddSellerModal()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="sellerName">Full Name</label>
+      <input type="text" id="sellerName" class="form-control" [(ngModel)]="newSeller.name" placeholder="Enter seller name">
+    </div>
+    <div class="form-group">
+      <label for="sellerEmail">Email</label>
+      <input type="email" id="sellerEmail" class="form-control" [(ngModel)]="newSeller.email" placeholder="Enter seller email">
+    </div>
+    <div class="form-group">
+      <label for="sellerPhone">Phone</label>
+      <input type="tel" id="sellerPhone" class="form-control" [(ngModel)]="newSeller.phone" placeholder="Enter seller phone">
+    </div>
+    <div class="form-group">
+      <label for="sellerAddress">Address</label>
+      <input type="text" id="sellerAddress" class="form-control" [(ngModel)]="newSeller.address" placeholder="Enter seller address">
+    </div>
+    <div class="form-group">
+      <label for="sellerStatus">Status</label>
+      <select id="sellerStatus" class="form-control" [(ngModel)]="newSeller.status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="suspended">Blocked</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="sellerRating">Rating (0-5)</label>
+      <input type="number" id="sellerRating" class="form-control" [(ngModel)]="newSeller.rating" min="0" max="5" step="0.1" placeholder="Enter seller rating">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeAddSellerModal()">Cancel</button>
+    <button class="btn btn-primary" (click)="addSeller()">Add Seller</button>
+  </div>
+</div>

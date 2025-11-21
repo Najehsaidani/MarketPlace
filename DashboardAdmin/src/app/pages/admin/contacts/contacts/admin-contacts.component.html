@@ -1,0 +1,198 @@
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header-section">
+        <div class="header-content">
+          <div>
+            <h1 class="header-title">Gestion des contacts</h1>
+            <p class="header-subtitle">Suivre et répondre aux messages des clients</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Messages</p>
+              <p class="stat-value">{{ contacts.length }}</p>
+            </div>
+            <div class="stat-icon bg-blue">
+              <i class='bx bx-envelope'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Nouveaux</p>
+              <p class="stat-value">{{ getNewContactsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-purple">
+              <i class='bx bx-message-square-dots'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">En cours</p>
+              <p class="stat-value">{{ getInProgressContactsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-yellow">
+              <i class='bx bx-loader-alt'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Résolus</p>
+              <p class="stat-value">{{ getResolvedContactsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-green">
+              <i class='bx bx-check-circle'></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacts Table -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2 class="card-title">Messages des clients</h2>
+        </div>
+
+        <div class="table-container">
+          <!-- Mobile view - Card layout -->
+          <div class="mobile-contacts-grid">
+            <div class="contact-card" *ngFor="let contact of contacts">
+              <div class="contact-card-content">
+                <div class="contact-card-info">
+                  <h3 class="contact-card-name">{{ contact.name }}</h3>
+                  <p class="contact-card-email">{{ contact.email }}</p>
+                  <div class="contact-card-meta">
+                    <span class="contact-subject">{{ contact.subject }}</span>
+                    <span class="status-badge" [ngClass]="getStatusClass(contact.status)">
+                      {{ getStatusText(contact.status) }}
+                    </span>
+                  </div>
+                  <p class="contact-card-message">{{ contact.message }}</p>
+                  <div class="contact-card-date">
+                    <i class='bx bx-calendar'></i>
+                    {{ contact.date | date:'short' }}
+                  </div>
+                </div>
+              </div>
+              <div class="contact-card-actions">
+                <button *ngIf="contact.status !== 'new'"
+                        class="btn-icon"
+                        (click)="updateStatus(contact.id, 'new')"
+                        title="Marquer comme nouveau">
+                  <i class='bx bx-message-square-dots'></i>
+                </button>
+                <button *ngIf="contact.status !== 'in-progress'"
+                        class="btn-icon"
+                        (click)="updateStatus(contact.id, 'in-progress')"
+                        title="Marquer comme en cours">
+                  <i class='bx bx-loader-alt'></i>
+                </button>
+                <button *ngIf="contact.status !== 'resolved'"
+                        class="btn-icon"
+                        (click)="updateStatus(contact.id, 'resolved')"
+                        title="Marquer comme résolu">
+                  <i class='bx bx-check-circle'></i>
+                </button>
+                <button class="btn-icon text-danger"
+                        (click)="deleteContact(contact.id)"
+                        title="Supprimer">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop view - Table layout -->
+          <table class="table contacts-table desktop-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Sujet</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contact of contacts" class="contact-row">
+                <td>
+                  <div class="contact-info">
+                    <span class="contact-name">{{ contact.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="contact-email">
+                    <span>{{ contact.email }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="contact-subject">{{ contact.subject }}</span>
+                </td>
+                <td class="message">
+                  <span>{{ contact.message }}</span>
+                </td>
+                <td>
+                  <div class="date-info">
+                    <i class='bx bx-calendar'></i>
+                    <span>{{ contact.date | date:'short' }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(contact.status)">
+                    {{ getStatusText(contact.status) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <button *ngIf="contact.status !== 'new'"
+                            class="btn-icon"
+                            (click)="updateStatus(contact.id, 'new')"
+                            title="Marquer comme nouveau">
+                      <i class='bx bx-message-square-dots'></i>
+                    </button>
+                    <button *ngIf="contact.status !== 'in-progress'"
+                            class="btn-icon"
+                            (click)="updateStatus(contact.id, 'in-progress')"
+                            title="Marquer comme en cours">
+                      <i class='bx bx-loader-alt'></i>
+                    </button>
+                    <button *ngIf="contact.status !== 'resolved'"
+                            class="btn-icon"
+                            (click)="updateStatus(contact.id, 'resolved')"
+                            title="Marquer comme résolu">
+                      <i class='bx bx-check-circle'></i>
+                    </button>
+                    <button class="btn-icon text-danger"
+                            (click)="deleteContact(contact.id)"
+                            title="Supprimer">
+                      <i class='bx bx-trash'></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

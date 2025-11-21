@@ -1,0 +1,182 @@
+<!-- Reminders -->
+<div class="reminders-container">
+    <div class="header">
+        <i class='bx bx-note'></i>
+        <h3>Rappels</h3>
+        <div class="header-actions">
+            <button class="btn-icon">
+                <i class='bx bx-filter'></i>
+            </button>
+            <button class="btn-icon">
+                <i class='bx bx-plus'></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile view - Card layout -->
+    <div class="mobile-reminders-grid">
+        <div class="reminder-card completed">
+            <div class="reminder-card-content">
+                <div class="reminder-card-info">
+                    <div class="task-title">
+                        <i class='bx bx-check-circle'></i>
+                        <span class="task-name">Démarrer notre réunion</span>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-date">15 Nov 2023</span>
+                    </div>
+                </div>
+            </div>
+            <div class="reminder-card-actions">
+                <button class="btn-icon">
+                    <i class='bx bx-dots-vertical-rounded'></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="reminder-card completed">
+            <div class="reminder-card-content">
+                <div class="reminder-card-info">
+                    <div class="task-title">
+                        <i class='bx bx-check-circle'></i>
+                        <span class="task-name">Analyser notre site</span>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-date">16 Nov 2023</span>
+                    </div>
+                </div>
+            </div>
+            <div class="reminder-card-actions">
+                <button class="btn-icon">
+                    <i class='bx bx-dots-vertical-rounded'></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="reminder-card not-completed">
+            <div class="reminder-card-content">
+                <div class="reminder-card-info">
+                    <div class="task-title">
+                        <i class='bx bx-x-circle'></i>
+                        <span class="task-name">Jouer au football</span>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-date">17 Nov 2023</span>
+                    </div>
+                </div>
+            </div>
+            <div class="reminder-card-actions">
+                <button class="btn-icon">
+                    <i class='bx bx-dots-vertical-rounded'></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop view - Table layout -->
+    <div class="table-container">
+        <table class="table reminders-table desktop-table">
+            <thead>
+                <tr>
+                    <th>Tâche</th>
+                    <th>Date d'échéance</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="reminder-row completed">
+                    <td>
+                        <div class="task-info">
+                            <i class='bx bx-check-circle'></i>
+                            <span class="task-name">Démarrer notre réunion</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="task-date">15 Nov 2023</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-completed">
+                            <i class='bx bx-check-circle'></i>
+                            Terminé
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon" title="Modifier">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="btn-icon" title="Supprimer">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                            <button class="btn-icon" title="Plus d'options">
+                                <i class='bx bx-dots-vertical-rounded'></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="reminder-row completed">
+                    <td>
+                        <div class="task-info">
+                            <i class='bx bx-check-circle'></i>
+                            <span class="task-name">Analyser notre site</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="task-date">16 Nov 2023</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-completed">
+                            <i class='bx bx-check-circle'></i>
+                            Terminé
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon" title="Modifier">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="btn-icon" title="Supprimer">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                            <button class="btn-icon" title="Plus d'options">
+                                <i class='bx bx-dots-vertical-rounded'></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="reminder-row not-completed">
+                    <td>
+                        <div class="task-info">
+                            <i class='bx bx-x-circle'></i>
+                            <span class="task-name">Jouer au football</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="task-date">17 Nov 2023</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-pending">
+                            <i class='bx bx-time'></i>
+                            En attente
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon" title="Modifier">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="btn-icon" title="Supprimer">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                            <button class="btn-icon" title="Plus d'options">
+                                <i class='bx bx-dots-vertical-rounded'></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- End of Reminders-->

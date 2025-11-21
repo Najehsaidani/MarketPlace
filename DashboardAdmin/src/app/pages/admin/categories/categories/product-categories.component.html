@@ -1,0 +1,220 @@
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header-section">
+        <div class="header-content">
+          <div>
+            <h1 class="header-title">Gestion des catégories</h1>
+            <p class="header-subtitle">Créer, modifier ou supprimer les catégories de produits</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" (click)="openAddModal()">
+              <i class='bx bx-plus'></i>
+              Ajouter une catégorie
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Catégories</p>
+              <p class="stat-value">{{ categories.length }}</p>
+            </div>
+            <div class="stat-icon bg-blue">
+              <i class='bx bx-category'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Catégories Actives</p>
+              <p class="stat-value">{{ getActiveCategoriesCount() }}</p>
+            </div>
+            <div class="stat-icon bg-green">
+              <i class='bx bx-check-circle'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Catégories Inactives</p>
+              <p class="stat-value">{{ getInactiveCategoriesCount() }}</p>
+            </div>
+            <div class="stat-icon bg-yellow">
+              <i class='bx bx-toggle-left'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Produits</p>
+              <p class="stat-value">{{ getTotalProductsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-purple">
+              <i class='bx bx-package'></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Table -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2 class="card-title">Catégories de produits</h2>
+        </div>
+
+        <div class="table-container">
+          <!-- Mobile view - Card layout -->
+          <div class="mobile-categories-grid">
+            <div class="category-card" *ngFor="let category of categories">
+              <div class="category-card-content">
+                <div class="category-card-info">
+                  <h3 class="category-card-name">{{ category.name }}</h3>
+                  <div class="category-card-meta">
+                    <span class="category-id">ID: {{ category.id }}</span>
+                    <span class="status-badge" [ngClass]="getStatusClass(category.status)">
+                      <i class='bx' [ngClass]="getStatusIcon(category.status)"></i>
+                      {{ category.status === 'active' ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                  <div class="category-card-stats">
+                    <span>Produits: {{ category.productsCount }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="category-card-actions">
+                <button class="btn-icon" (click)="openEditModal(category)" title="Modifier">
+                  <i class='bx bx-edit'></i>
+                </button>
+                <button class="btn-icon text-danger" (click)="category.id !== undefined && deleteCategory(category.id)" title="Supprimer">
+                  <i class='bx bx-trash'></i>
+                </button>
+                <button class="btn-icon"
+                        [class.text-warning]="category.status === 'active'"
+                        [class.text-success]="category.status === 'inactive'"
+                        (click)="category.id !== undefined && toggleCategoryStatus(category.id)"
+                        title="{{ category.status === 'active' ? 'Désactiver' : 'Activer' }}">
+                  <i [ngClass]="category.status === 'active' ? 'bx bx-toggle-right' : 'bx bx-toggle-left'"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop view - Table layout -->
+          <table class="table categories-table desktop-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nom de la catégorie</th>
+                <th>Nombre de produits</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let category of categories" class="category-row">
+                <td>
+                  <span class="category-id">{{ category.id }}</span>
+                </td>
+                <td>
+                  <span class="category-name">{{ category.name }}</span>
+                </td>
+                <td>
+                  <span class="products-count">{{ category.productsCount }}</span>
+                </td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(category.status)">
+                    <i class='bx' [ngClass]="getStatusIcon(category.status)"></i>
+                    {{ category.status === 'active' ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <button class="btn-icon" (click)="openEditModal(category)" title="Modifier">
+                      <i class='bx bx-edit'></i>
+                    </button>
+                    <button class="btn-icon text-danger" (click)="category.id !== undefined && deleteCategory(category.id)" title="Supprimer">
+                      <i class='bx bx-trash'></i>
+                    </button>
+                    <button class="btn-icon"
+                            [class.text-warning]="category.status === 'active'"
+                            [class.text-success]="category.status === 'inactive'"
+                            (click)="category.id !== undefined && toggleCategoryStatus(category.id)"
+                            title="{{ category.status === 'active' ? 'Désactiver' : 'Activer' }}">
+                      <i [ngClass]="category.status === 'active' ? 'bx bx-toggle-right' : 'bx bx-toggle-left'"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal pour ajouter une catégorie -->
+<div class="modal-overlay" *ngIf="showAddModal" (click)="closeModals()"></div>
+<div class="modal centered-modal" *ngIf="showAddModal">
+  <div class="modal-header">
+    <h3>Ajouter une nouvelle catégorie</h3>
+    <button class="close-modal-btn" (click)="closeModals()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="categoryName">Nom de la catégorie</label>
+      <input type="text" id="categoryName" class="form-control" [(ngModel)]="categoryForm.name" placeholder="Entrez le nom de la catégorie">
+    </div>
+    <div class="form-group">
+      <label for="categoryStatus">Statut</label>
+      <select id="categoryStatus" class="form-control" [(ngModel)]="categoryForm.status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+    <button class="btn btn-primary" (click)="addCategory()">Ajouter</button>
+  </div>
+</div>
+
+<!-- Modal pour modifier une catégorie -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeModals()"></div>
+<div class="modal centered-modal" *ngIf="showEditModal">
+  <div class="modal-header">
+    <h3>Modifier la catégorie</h3>
+    <button class="close-modal-btn" (click)="closeModals()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="editCategoryName">Nom de la catégorie</label>
+      <input type="text" id="editCategoryName" class="form-control" [(ngModel)]="categoryForm.name" placeholder="Entrez le nom de la catégorie">
+    </div>
+    <div class="form-group">
+      <label for="editCategoryStatus">Statut</label>
+      <select id="editCategoryStatus" class="form-control" [(ngModel)]="categoryForm.status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+    <button class="btn btn-primary" (click)="updateCategory()">Mettre à jour</button>
+  </div>
+</div>

@@ -1,0 +1,194 @@
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header-section">
+        <div class="header-content">
+          <div>
+            <h1 class="header-title">Gestion des avis clients</h1>
+            <p class="header-subtitle">Modérer et gérer les avis laissés par les clients</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Avis</p>
+              <p class="stat-value">{{ reviews.length }}</p>
+            </div>
+            <div class="stat-icon bg-blue">
+              <i class='bx bx-star'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">En attente</p>
+              <p class="stat-value">{{ getPendingReviewsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-purple">
+              <i class='bx bx-time'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Approuvés</p>
+              <p class="stat-value">{{ getApprovedReviewsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-green">
+              <i class='bx bx-check-circle'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Rejetés</p>
+              <p class="stat-value">{{ getRejectedReviewsCount() }}</p>
+            </div>
+            <div class="stat-icon bg-red">
+              <i class='bx bx-block'></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Table -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2 class="card-title">Liste des avis</h2>
+        </div>
+
+        <div class="table-container">
+          <!-- Mobile view - Card layout -->
+          <div class="mobile-reviews-grid">
+            <div class="review-card" *ngFor="let review of reviews">
+              <div class="review-card-content">
+                <div class="review-card-info">
+                  <h3 class="review-card-product">{{ review.product }}</h3>
+                  <p class="review-card-customer">{{ review.customer }}</p>
+                  <div class="review-card-meta">
+                    <div class="rating">
+                      <span *ngFor="let star of [].constructor(5); let i = index"
+                            class="star"
+                            [class.filled]="i < review.rating">
+                        ★
+                      </span>
+                    </div>
+                    <span class="status-badge" [ngClass]="getStatusClass(review.status)">
+                      {{ review.status === 'approved' ? 'Approuvé' : review.status === 'pending' ? 'En attente' : 'Rejeté' }}
+                    </span>
+                  </div>
+                  <p class="review-card-comment">{{ review.comment }}</p>
+                  <div class="review-card-date">
+                    <i class='bx bx-calendar'></i>
+                    {{ review.date | date:'short' }}
+                  </div>
+                </div>
+              </div>
+              <div class="review-card-actions">
+                <button *ngIf="review.status !== 'approved'"
+                        class="btn-icon"
+                        (click)="approveReview(review.id)"
+                        title="Approuver">
+                  <i class='bx bx-check-circle'></i>
+                </button>
+                <button *ngIf="review.status !== 'rejected'"
+                        class="btn-icon"
+                        (click)="rejectReview(review.id)"
+                        title="Rejeter">
+                  <i class='bx bx-block'></i>
+                </button>
+                <button class="btn-icon text-danger"
+                        (click)="deleteReview(review.id)"
+                        title="Supprimer">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop view - Table layout -->
+          <table class="table reviews-table desktop-table">
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Client</th>
+                <th>Note</th>
+                <th>Commentaire</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let review of reviews" class="review-row">
+                <td>
+                  <span class="product-name">{{ review.product }}</span>
+                </td>
+                <td>
+                  <span class="customer-name">{{ review.customer }}</span>
+                </td>
+                <td>
+                  <div class="rating">
+                    <span *ngFor="let star of [].constructor(5); let i = index"
+                          class="star"
+                          [class.filled]="i < review.rating">
+                      ★
+                    </span>
+                  </div>
+                </td>
+                <td class="comment">
+                  <span>{{ review.comment }}</span>
+                </td>
+                <td>
+                  <div class="date-info">
+                    <i class='bx bx-calendar'></i>
+                    <span>{{ review.date | date:'short' }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(review.status)">
+                    {{ review.status === 'approved' ? 'Approuvé' : review.status === 'pending' ? 'En attente' : 'Rejeté' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <button *ngIf="review.status !== 'approved'"
+                            class="btn-icon"
+                            (click)="approveReview(review.id)"
+                            title="Approuver">
+                      <i class='bx bx-check-circle'></i>
+                    </button>
+                    <button *ngIf="review.status !== 'rejected'"
+                            class="btn-icon"
+                            (click)="rejectReview(review.id)"
+                            title="Rejeter">
+                      <i class='bx bx-block'></i>
+                    </button>
+                    <button class="btn-icon text-danger"
+                            (click)="deleteReview(review.id)"
+                            title="Supprimer">
+                      <i class='bx bx-trash'></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

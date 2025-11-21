@@ -1,0 +1,355 @@
+<!-- Main Content -->
+<div class="content">
+  <app-navbar></app-navbar>
+
+  <main>
+    <div class="app-container">
+      <!-- Header -->
+      <div class="header-section">
+        <div class="header-content">
+          <div>
+            <h1 class="header-title">Customer Management</h1>
+            <p class="header-subtitle">Manage your customer base and relationships</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" (click)="openAddClientForm()">
+              <i class='bx bx-user-plus'></i>
+              Add Customer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Total Customers</p>
+              <p class="stat-value">{{ clients.length }}</p>
+            </div>
+            <div class="stat-icon bg-blue">
+              <i class='bx bx-user'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Active Customers</p>
+              <p class="stat-value">{{ getTotalActiveClients() }}</p>
+            </div>
+            <div class="stat-icon bg-green">
+              <i class='bx bx-check-circle'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Blocked Customers</p>
+              <p class="stat-value">{{ getTotalSuspendedClients() }}</p>
+            </div>
+            <div class="stat-icon bg-red">
+              <i class='bx bx-block'></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-content">
+            <div class="stat-info">
+              <p class="stat-title">Inactive Customers</p>
+              <p class="stat-value">{{ getTotalInactiveClients() }}</p>
+            </div>
+            <div class="stat-icon bg-yellow">
+              <i class='bx bx-user-plus'></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters and Search -->
+      <div class="filters-card card glass-card">
+        <div class="filters-content">
+          <div class="search-box">
+            <i class='bx bx-search'></i>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search customers..."
+              [(ngModel)]="searchTerm"
+              (input)="applyFilters()"
+            >
+          </div>
+
+          <select
+            class="form-control filter-select"
+            [(ngModel)]="selectedStatus"
+            (change)="applyFilters()"
+          >
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="suspended">Blocked</option>
+          </select>
+
+          <select
+            class="form-control filter-select"
+            [(ngModel)]="sortBy"
+            (change)="applyFilters()"
+          >
+            <option value="name">Sort by Name</option>
+            <option value="registrationDate">Sort by Join Date</option>
+            <option value="totalSpent">Sort by Total Spent</option>
+            <option value="totalOrders">Sort by Orders</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Clients Table -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2 class="card-title">Customer List ({{ filteredClients.length }})</h2>
+        </div>
+
+        <div class="table-container">
+          <!-- Mobile view - Card layout -->
+          <div class="mobile-clients-grid">
+            <div class="client-card" *ngFor="let client of filteredClients">
+              <div class="client-card-content" (click)="viewClientDetails(client)">
+                <div class="client-card-image">
+                  <div class="client-avatar">
+                    <span>{{ getClientInitials(client.name) }}</span>
+                  </div>
+                </div>
+                <div class="client-card-info">
+                  <h3 class="client-card-name">{{ client.name }}</h3>
+                  <p class="client-card-email">{{ client.email }}</p>
+                  <div class="client-card-meta">
+                    <span class="client-id">{{ getClientId(client.id) }}</span>
+                    <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                      <i class='bx' [ngClass]="getStatusIcon(client.status)"></i>
+                      {{ client.status }}
+                    </span>
+                  </div>
+                  <div class="client-card-stats">
+                    <span>Orders: {{ client.totalOrders }}</span>
+                    <span>Spent: {{ client.totalSpent | currency:'TND' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="client-card-actions">
+                <button class="btn-icon" (click)="viewClientDetails(client); $event.stopPropagation()" title="View Details">
+                  <i class='bx bx-show'></i>
+                  View
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop view - Table layout -->
+          <table class="table clients-table desktop-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>Location</th>
+                <th>Join Date</th>
+                <th>Orders</th>
+                <th>Spent</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let client of filteredClients" class="client-row">
+                <td (click)="viewClientDetails(client)">
+                  <div class="client-info">
+                    <div class="client-avatar">
+                      <span>{{ getClientInitials(client.name) }}</span>
+                    </div>
+                    <div class="client-details">
+                      <span class="client-name">{{ client.name }}</span>
+                      <span class="client-id">{{ getClientId(client.id) }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <div class="contact-info">
+                    <div class="contact-item">
+                      <i class='bx bx-envelope'></i>
+                      <span>{{ client.email }}</span>
+                    </div>
+                    <div class="contact-item">
+                      <i class='bx bx-phone'></i>
+                      <span>{{ client.phone }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <div class="location-info">
+                    <i class='bx bx-map'></i>
+                    <span>{{ client.address }}</span>
+                  </div>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <div class="date-info">
+                    <i class='bx bx-calendar'></i>
+                    <span>{{ client.registrationDate | date:'short' }}</span>
+                  </div>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <span class="orders-count">{{ client.totalOrders }}</span>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <span class="spent-amount">{{ client.totalSpent | currency:'TND' }}</span>
+                </td>
+                <td (click)="viewClientDetails(client)">
+                  <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                    <i class='bx' [ngClass]="getStatusIcon(client.status)"></i>
+                    {{ client.status }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-primary" (click)="viewClientDetails(client); $event.stopPropagation()">
+                    <i class='bx bx-show'></i>
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Client Details Modal -->
+<div class="modal-overlay" *ngIf="showClientModal" (click)="closeClientModal()"></div>
+<div class="modal client-details-modal centered-modal" *ngIf="showClientModal" (click)="$event.stopPropagation()">
+  <div class="modal-header">
+    <h3>Customer Details</h3>
+    <button class="close-modal-btn" (click)="closeClientModal()">&times;</button>
+  </div>
+  <div class="modal-body" *ngIf="selectedClient">
+    <div class="client-detail-content">
+      <div class="client-detail-header">
+        <div class="client-detail-avatar">
+          <span>{{ getClientInitials(selectedClient.name) }}</span>
+        </div>
+        <div class="client-detail-info">
+          <h4>{{ selectedClient.name }}</h4>
+          <span class="status-badge" [ngClass]="getStatusClass(selectedClient.status)">
+            {{ selectedClient.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="client-detail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Customer ID:</span>
+          <span class="meta-value">{{ getClientId(selectedClient.id) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Email:</span>
+          <span class="meta-value">{{ selectedClient.email }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Phone:</span>
+          <span class="meta-value">{{ selectedClient.phone }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Address:</span>
+          <span class="meta-value">{{ selectedClient.address }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Join Date:</span>
+          <span class="meta-value">{{ selectedClient.registrationDate | date:'full' }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Total Orders:</span>
+          <span class="meta-value">{{ selectedClient.totalOrders }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Total Spent:</span>
+          <span class="meta-value">{{ selectedClient.totalSpent | currency:'TND' }}</span>
+        </div>
+      </div>
+
+      <div class="client-actions-section">
+        <h5>Actions</h5>
+        <div class="action-buttons">
+          <button
+            class="btn btn-primary"
+            (click)="activateClient(selectedClient.id); closeClientModal()"
+            *ngIf="selectedClient.status !== 'active'"
+          >
+            <i class='bx bx-check-circle'></i>
+            Activate
+          </button>
+          <button
+            class="btn btn-reject"
+            (click)="suspendClient(selectedClient.id); closeClientModal()"
+            *ngIf="selectedClient.status === 'active'"
+          >
+            <i class='bx bx-block'></i>
+            Suspend
+          </button>
+          <button class="btn btn-delete" (click)="deleteClient(selectedClient.id); closeClientModal()">
+            <i class='bx bx-trash'></i>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeClientModal()">
+      <i class='bx bx-x'></i>
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- Add Client Modal -->
+<div class="modal-overlay" *ngIf="showAddClientModal" (click)="closeAddClientModal()"></div>
+<div class="modal centered-modal" *ngIf="showAddClientModal">
+  <div class="modal-header">
+    <h3>Add New Customer</h3>
+    <button class="close-modal-btn" (click)="closeAddClientModal()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="clientName">Full Name</label>
+      <input type="text" id="clientName" class="form-control" [(ngModel)]="newClient.name" placeholder="Enter customer name">
+    </div>
+    <div class="form-group">
+      <label for="clientEmail">Email</label>
+      <input type="email" id="clientEmail" class="form-control" [(ngModel)]="newClient.email" placeholder="Enter customer email">
+    </div>
+    <div class="form-group">
+      <label for="clientPhone">Phone</label>
+      <input type="tel" id="clientPhone" class="form-control" [(ngModel)]="newClient.phone" placeholder="Enter customer phone">
+    </div>
+    <div class="form-group">
+      <label for="clientAddress">Address</label>
+      <input type="text" id="clientAddress" class="form-control" [(ngModel)]="newClient.address" placeholder="Enter customer address">
+    </div>
+    <div class="form-group">
+      <label for="clientStatus">Status</label>
+      <select id="clientStatus" class="form-control" [(ngModel)]="newClient.status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="suspended">Blocked</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeAddClientModal()">Cancel</button>
+    <button class="btn btn-primary" (click)="addClient()">Add Customer</button>
+  </div>
+</div>
